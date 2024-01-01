@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Index Producto</title>
+    </h:head>
+    <h:body>
+        <center><h1>Gestión de producto</h1></center>
+        <p:growl id='message' autoUpdate="true" showDetail='true' life='4000'/>
+        
+        
+        <h:form id="insertForm">
+            <p:panelGrid columns="2" style="margin: 0 auto">
+
+
+                <p:outputLabel value="Código"/>
+                <p:inputText value="#{procesarProducto.prod.codigoProducto}"/>
+                
+                <p:outputLabel value="Nombre"/>
+                <p:inputText value="#{procesarProducto.prod.nombre}" required="true" requiredMessage="Campo requerido"/>
+
+                <p:outputLabel value="Categoría"/>
+                <p:inputText value="#{procesarProducto.prod.categoria}" required="true" requiredMessage="Campo requerido"/>
+
+                <p:outputLabel value="Precio"/>
+                <p:inputText value="#{procesarProducto.prod.precio}" required="true" requiredMessage="Campo requerido"/>
+
+                <p:outputLabel value="Año Fabricación"/>
+                <p:inputText value="#{procesarProducto.prod.anioFabricacion}" required="true" requiredMessage="Campo requerido"/>
+
+                <p:outputLabel value="Año Vencimiento"/>
+                <p:inputText value="#{procesarProducto.prod.anioVencimiento}" required="true" requiredMessage="Campo requerido"/>
+
+                <p:outputLabel value="Proveedor"/>
+                <p:selectOneMenu value="#{procesarProducto.prod.proveedor.codigoProveedor}" id="proveedor">
+                    <f:selectItems value="#{procesarProducto.lstProv}"/>
+                </p:selectOneMenu>
+
+                <p:commandButton value="Guardar" actionListener="#{procesarProducto.newProduct()}"
+                                 update=":productoData:showProduct :insertForm"/>
+                <p:commandButton value="Cancelar" actionListener="#{procesarProducto.cancel()}" update=":insertForm"/>
+
+            </p:panelGrid>
+        </h:form>
+        <p:separator/>
+        <h:form id="productoData">
+            <p:dataTable id="showProduct" var="prod" value="#{procesarProducto.lst}" emptyMessage="No existen datos">
+
+
+
+                <p:column headerText="Código">
+                    <h:outputText value="#{prod.codigoProducto}"/>
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{prod.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Categoría">
+                    <h:outputText value="#{prod.categoria}"/>
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{prod.precio}"/>
+                </p:column>
+
+                <p:column headerText="Año Fabricación">
+                    <h:outputText value="#{prod.anioFabricacion}"/>
+                </p:column>
+
+                <p:column headerText="Año Vencimiento">
+                    <h:outputText value="#{prod.anioVencimiento}"/>
+                </p:column>
+
+                <p:column headerText="Proveedor">
+                    <h:outputText value="#{prod.proveedor.nombre}"/>
+                </p:column>
+                
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Modificar" oncomplete="PF('dialogModificar').show();"
+                                     update=':updateForm'>
+                    <f:setPropertyActionListener target='#{procesarProducto.prod()}' value='#{prod}'/>
+                    </p:commandButton>
+                </p:column>
+                
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Eliminar" oncomplete="PF('dialogEliminar').show();"
+                                     update=':deleteForm'>
+                    <f:setPropertyActionListener target='#{procesarProducto.prod()}' value='#{prod}'/>
+                    </p:commandButton>
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+
+
+        <p:dialog id="dialog" header="Actualizar datos" widgetVar="dialogModificar" showEffect="explode"
+                  hideEffect="explode" modal="true">
+            <h:form id="updateForm">
+                <p:panelGrid columns="2" style="margin: 0 auto">
+                            
+
+                    <p:outputLabel value="Código"/>
+                    <p:inputText value="#{procesarProducto.prod.codigoProducto}"/>
+
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText value="#{procesarProducto.prod.nombre}"/>
+
+                    <p:outputLabel value="Categoría"/>
+                    <p:inputText value="#{procesarProducto.prod.categoria}"/>
+
+                    <p:outputLabel value="Precio"/>
+                    <p:inputText value="#{procesarProducto.prod.precio}"/>
+
+                    <p:outputLabel value="Año Fabricación"/>
+                    <p:inputText value="#{procesarProducto.prod.anioFabricacion}"/>
+
+                    <p:outputLabel value="Año Vencimiento"/>
+                    <p:inputText value="#{procesarProducto.prod.anioVencimiento}"/>
+
+                    <p:outputLabel value="Proveedor"/>
+                    <p:selectOneMenu value="#{procesarProducto.prod.proveedor.codigoProveedor}" id="proveedor">
+                        <f:selectItems value="#{procesarProducto.lstProv}"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Modificar" actionListener="#{procesarProducto.updateProduct()}"
+                                     update=":productoData:showProduct" oncomplete="PF('dialogModificar').hide();"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dialogModificar').hide()" update=":insertForm"
+                                     actionListener="#{procesarProducto.cancel()}"/>
+
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+          <p:dialog id="dialog1" header="Eliminar datos" widgetVar="dialogEliminar" showEffect="explode"
+                  hideEffect="explode" modal="true">
+            <h:form id="deleteForm">
+               
+                <h:outputText value="¿Eliminar registro?"/>
+                <p:commandButton value='Sí' actionListener="#{procesarProducto.deleteProduct()}" update=":productoData
+                                 " oncomplete="PF('dialogEliminar').hide();"/> 
+                    
+              
+                
+                <p:commandButton value="No" onclick="PF('dialogEliminar').hide();"/>
+                    
+               
+                
+                
+            </h:form>
+        </p:dialog>
+        
+    </h:body>
+</html>
+

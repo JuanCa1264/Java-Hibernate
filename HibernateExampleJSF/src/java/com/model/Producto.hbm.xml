@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 oct. 2019 15:19:59 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.model.Producto" table="producto" catalog="inventario2" optimistic-lock="version">
+        <id name="codigoProducto" type="int">
+            <column name="codigoProducto" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="proveedor" class="com.model.Proveedor" fetch="select">
+            <column name="codigoProveedor" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" />
+        </property>
+        <property name="categoria" type="string">
+            <column name="categoria" length="50" />
+        </property>
+        <property name="precio" type="java.lang.Double">
+            <column name="precio" precision="22" scale="0" />
+        </property>
+        <property name="anioFabricacion" type="java.lang.Integer">
+            <column name="anioFabricacion" />
+        </property>
+        <property name="anioVencimiento" type="java.lang.Integer">
+            <column name="anioVencimiento" />
+        </property>
+    </class>
+</hibernate-mapping>
